@@ -1,19 +1,8 @@
-<<<<<<< HEAD
-=======
-
-```markdown
->>>>>>> 56ae3b39aeaf12107e93477d946ae4b5baed0570
 # 🧹 tidyup
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-<<<<<<< HEAD
 [![Tests](https://github.com/your-username/tidyup/actions/workflows/tests.yml/badge.svg)](https://github.com/your-username/tidyup/actions)
-=======
-[![Tests](https://github.com/tanvirjahanshakib/tidyup/actions/workflows/ci.yml/badge.svg)](https://github.com/tanvirjahanshakib/tidyup/actions)
-
-**A smart file organizer for messy folders — available as both a CLI and a modern dark-themed desktop app. Organizes by type, date, or filename pattern, with duplicate detection, stale-file finding, live watch mode, multi-step undo history, and full audit trails.**
->>>>>>> 56ae3b39aeaf12107e93477d946ae4b5baed0570
 
 **A smart file organizer for messy folders — available as both a CLI and a point-and-click desktop app. Organizes by type, date, or filename pattern, with duplicate detection, stale-file finding, live watch mode, multi-step undo history, and full audit trails. Zero dependencies.**
 
@@ -77,14 +66,7 @@ Every "file organizer" script does the basic type-sorting thing. tidyup goes con
 ## Installation
 
 ```bash
-<<<<<<< HEAD
 pip install tidyup-cli
-=======
-git clone [https://github.com/tanvirjahanshakib/tidyup.git](https://github.com/tanvirjahanshakib/tidyup.git)
-cd tidyup
-pip install -e .
-
->>>>>>> 56ae3b39aeaf12107e93477d946ae4b5baed0570
 ```
 
 Or install from source:
@@ -273,12 +255,4 @@ Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-<<<<<<< HEAD
 MIT © [Your Name](LICENSE)
-=======
-MIT © [Shakib](https://www.google.com/search?q=LICENSE)
-
-```
-
-```
->>>>>>> 56ae3b39aeaf12107e93477d946ae4b5baed0570
