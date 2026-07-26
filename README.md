@@ -1,15 +1,10 @@
-একদম চিন্তার কিছু নেই! পুরো **`README.md`** ফাইলটা একবারে পুরো কোড ব্লকে নিচে দেওয়া হলো।
-
-তুমি শুধু এই ব্লকের **কপি বাটন** চাপ দিয়ে সম্পূর্ণটা কপি করে তোমার `README.md` ফাইলের ভেতরে বসিয়ে দাও।
-
-*(ফাইলে `YOUR_GITHUB_USERNAME` এর জায়গায় তোমার আসল গিটহাব ইউজারনেম দিতে ভুলে যেও না!)*
 
 ```markdown
 # 🧹 tidyup
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests](https://github.com/YOUR_GITHUB_USERNAME/tidyup/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_GITHUB_USERNAME/tidyup/actions)
+[![Tests](https://github.com/tanvirjahanshakib/tidyup/actions/workflows/ci.yml/badge.svg)](https://github.com/tanvirjahanshakib/tidyup/actions)
 
 **A smart file organizer for messy folders — available as both a CLI and a modern dark-themed desktop app. Organizes by type, date, or filename pattern, with duplicate detection, stale-file finding, live watch mode, multi-step undo history, and full audit trails.**
 
@@ -77,7 +72,7 @@ Every "file organizer" script does the basic type-sorting thing. tidyup goes con
 Install directly from PyPI (when published) or from source:
 
 ```bash
-git clone [https://github.com/YOUR_GITHUB_USERNAME/tidyup.git](https://github.com/YOUR_GITHUB_USERNAME/tidyup.git)
+git clone [https://github.com/tanvirjahanshakib/tidyup.git](https://github.com/tanvirjahanshakib/tidyup.git)
 cd tidyup
 pip install -e .
 
