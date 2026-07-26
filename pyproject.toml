@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tidyup-cli"
+version = "0.1.0"
+description = "A smart command-line tool and desktop GUI that organize messy folders by file type and/or date."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Your Name" }]
+keywords = ["cli", "gui", "file-organizer", "productivity", "automation", "duplicate-finder", "downloads-cleaner"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Environment :: X11 Applications",
+    "Topic :: Utilities",
+]
+
+[project.scripts]
+tidyup = "tidyup.cli:main"
+tidyup-gui = "tidyup.gui:main"
+
+[project.urls]
+Homepage = "https://github.com/your-username/tidyup"
+Issues = "https://github.com/your-username/tidyup/issues"

@@ -1,0 +1,56 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+  gui-real-tk-smoke-test:
+    # Extra safety net: the unit tests above stub out tkinter so they
+    # can run headless on any OS. This job instead installs the real
+    # Tk library and a virtual display, then just imports and
+    # instantiates the actual GUI window (without a real user driving
+    # it) to catch any error that only a genuine Tk runtime would surface.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Tk and a virtual display
+        run: sudo apt-get update && sudo apt-get install -y python3-tk xvfb
+
+      - name: Import and instantiate the real GUI window
+        run: |
+          xvfb-run -a python -c "
+          import tkinter as tk
+          from tidyup.gui import TidyupApp
+          root = tk.Tk()
+          app = TidyupApp(root)
+          root.update()
+          root.destroy()
+          print('GUI window created and destroyed successfully with real Tk.')
+          "
