@@ -1,6 +1,5 @@
 """
-Desktop GUI for tidyup, built with tkinter (Python standard library —
-no extra dependencies, same as the CLI).
+Desktop GUI for tidyup, built with CustomTkinter.
 
 Run with:  tidyup-gui
 or:        python -m tidyup.gui
@@ -10,8 +9,9 @@ import threading
 import time
 import tkinter as tk
 from pathlib import Path
-from tkinter import filedialog, messagebox, ttk
-from tkinter.scrolledtext import ScrolledText
+from tkinter import filedialog, messagebox
+
+import customtkinter as ctk
 
 from tidyup import __version__
 from tidyup.categories import DEFAULT_CATEGORIES, load_categories, find_project_config
@@ -27,6 +27,10 @@ from tidyup.organizer import (
     clean_empty_folders,
 )
 
+# CustomTkinter থিম ও ডার্ক মোড সেটআপ
+ctk.set_appearance_mode("Dark")
+ctk.set_default_color_theme("blue")
+
 
 def _human_size(num_bytes: int) -> str:
     size = float(num_bytes)
@@ -41,8 +45,8 @@ class TidyupApp:
     def __init__(self, root):
         self.root = root
         self.root.title(f"tidyup {__version__}")
-        self.root.geometry("720x560")
-        self.root.minsize(600, 460)
+        self.root.geometry("800x680")
+        self.root.minsize(700, 550)
 
         self.folder_var = tk.StringVar()
         self.by_var = tk.StringVar(value="type")
@@ -58,67 +62,79 @@ class TidyupApp:
     # ---------- layout ----------
 
     def _build_layout(self):
-        pad = {"padx": 8, "pady": 6}
+        pad = {"padx": 12, "pady": 8}
 
-        folder_frame = ttk.Frame(self.root)
+        # 1. Folder Selection Frame
+        folder_frame = ctk.CTkFrame(self.root)
         folder_frame.pack(fill="x", **pad)
 
-        ttk.Label(folder_frame, text="Folder:").pack(side="left")
-        entry = ttk.Entry(folder_frame, textvariable=self.folder_var)
-        entry.pack(side="left", fill="x", expand=True, padx=6)
-        ttk.Button(folder_frame, text="Browse...", command=self._browse_folder).pack(side="left")
+        ctk.CTkLabel(folder_frame, text="Folder:", font=("Segoe UI", 13, "bold")).pack(side="left", padx=(10, 5))
+        entry = ctk.CTkEntry(folder_frame, textvariable=self.folder_var, placeholder_text="Select directory to clean...")
+        entry.pack(side="left", fill="x", expand=True, padx=6, pady=8)
+        ctk.CTkButton(folder_frame, text="Browse...", width=90, command=self._browse_folder).pack(side="left", padx=(0, 10))
 
-        options_frame = ttk.LabelFrame(self.root, text="Options")
+        # 2. Options Frame
+        options_frame = ctk.CTkFrame(self.root)
         options_frame.pack(fill="x", **pad)
 
-        ttk.Label(options_frame, text="Organize by:").grid(row=0, column=0, sticky="w", padx=6, pady=4)
-        by_combo = ttk.Combobox(
-            options_frame, textvariable=self.by_var,
-            values=["type", "date", "both"], state="readonly", width=10,
+        ctk.CTkLabel(options_frame, text="Organize by:", font=("Segoe UI", 12)).grid(row=0, column=0, sticky="w", padx=10, pady=8)
+        by_combo = ctk.CTkOptionMenu(
+            options_frame,
+            variable=self.by_var,
+            values=["type", "date", "both"],
+            width=110
         )
-        by_combo.grid(row=0, column=1, sticky="w", padx=6, pady=4)
+        by_combo.grid(row=0, column=1, sticky="w", padx=6, pady=8)
 
-        ttk.Checkbutton(
+        ctk.CTkSwitch(
             options_frame, text="Include subfolders (recursive)", variable=self.recursive_var
-        ).grid(row=0, column=2, sticky="w", padx=12, pady=4)
+        ).grid(row=0, column=2, sticky="w", padx=15, pady=8)
 
-        ttk.Checkbutton(
+        ctk.CTkSwitch(
             options_frame, text="Smart filename categorization", variable=self.smart_names_var
-        ).grid(row=0, column=3, sticky="w", padx=12, pady=4)
+        ).grid(row=0, column=3, sticky="w", padx=15, pady=8)
 
-        actions_frame = ttk.LabelFrame(self.root, text="Actions")
+        # 3. Actions Frame
+        actions_frame = ctk.CTkFrame(self.root)
         actions_frame.pack(fill="x", **pad)
 
-        row1 = ttk.Frame(actions_frame)
-        row1.pack(fill="x", pady=2)
-        ttk.Button(row1, text="Preview (dry run)", command=self.action_preview).pack(side="left", padx=4, pady=4)
-        ttk.Button(row1, text="Organize Now", command=self.action_organize).pack(side="left", padx=4, pady=4)
-        ttk.Button(row1, text="Undo Last Run", command=self.action_undo).pack(side="left", padx=4, pady=4)
-        ttk.Button(row1, text="Show History", command=self.action_history).pack(side="left", padx=4, pady=4)
+        row1 = ctk.CTkFrame(actions_frame, fg_color="transparent")
+        row1.pack(fill="x", pady=4, padx=6)
+        ctk.CTkButton(row1, text="Preview (dry run)", fg_color="#4A5568", hover_color="#2D3748", command=self.action_preview).pack(side="left", padx=4)
+        ctk.CTkButton(row1, text="Organize Now", fg_color="#2B6CB0", hover_color="#2C5282", command=self.action_organize).pack(side="left", padx=4)
+        ctk.CTkButton(row1, text="Undo Last Run", fg_color="#C53030", hover_color="#9B2C2C", command=self.action_undo).pack(side="left", padx=4)
+        ctk.CTkButton(row1, text="Show History", fg_color="#4A5568", hover_color="#2D3748", command=self.action_history).pack(side="left", padx=4)
 
-        row2 = ttk.Frame(actions_frame)
-        row2.pack(fill="x", pady=2)
-        ttk.Button(row2, text="Stats", command=self.action_stats).pack(side="left", padx=4, pady=4)
-        ttk.Button(row2, text="Find Duplicates", command=self.action_duplicates).pack(side="left", padx=4, pady=4)
-        ttk.Button(row2, text="Clean Empty Folders", command=self.action_clean_empty).pack(side="left", padx=4, pady=4)
+        row2 = ctk.CTkFrame(actions_frame, fg_color="transparent")
+        row2.pack(fill="x", pady=4, padx=6)
+        ctk.CTkButton(row2, text="Stats", command=self.action_stats).pack(side="left", padx=4)
+        ctk.CTkButton(row2, text="Find Duplicates", command=self.action_duplicates).pack(side="left", padx=4)
+        ctk.CTkButton(row2, text="Clean Empty Folders", command=self.action_clean_empty).pack(side="left", padx=4)
 
-        row3 = ttk.Frame(actions_frame)
-        row3.pack(fill="x", pady=2)
-        ttk.Label(row3, text="Stale after (days):").pack(side="left", padx=(4, 2))
-        ttk.Entry(row3, textvariable=self.stale_days_var, width=6).pack(side="left")
-        ttk.Button(row3, text="Find Stale Files", command=self.action_stale).pack(side="left", padx=8)
+        row3 = ctk.CTkFrame(actions_frame, fg_color="transparent")
+        row3.pack(fill="x", pady=4, padx=6)
+        ctk.CTkLabel(row3, text="Stale after (days):").pack(side="left", padx=(4, 2))
+        ctk.CTkEntry(row3, textvariable=self.stale_days_var, width=60).pack(side="left")
+        ctk.CTkButton(row3, text="Find Stale Files", command=self.action_stale).pack(side="left", padx=8)
 
-        self.watch_button = ttk.Button(row3, text="Start Watching", command=self.toggle_watch)
+        self.watch_button = ctk.CTkButton(
+            row3, text="Start Watching", fg_color="#2F855A", hover_color="#22543D", command=self.toggle_watch
+        )
         self.watch_button.pack(side="left", padx=8)
 
-        output_frame = ttk.LabelFrame(self.root, text="Output")
+        # 4. Output / Console Frame
+        output_frame = ctk.CTkFrame(self.root)
         output_frame.pack(fill="both", expand=True, **pad)
 
-        self.output = ScrolledText(output_frame, wrap="word", state="disabled", font=("Courier", 10))
-        self.output.pack(fill="both", expand=True)
+        ctk.CTkLabel(output_frame, text="Activity Log", font=("Segoe UI", 12, "bold")).pack(anchor="w", padx=10, pady=(6, 2))
 
+        self.output = ctk.CTkTextbox(output_frame, wrap="word", font=("Consolas", 11))
+        self.output.pack(fill="both", expand=True, padx=8, pady=(0, 8))
+        self.output.configure(state="disabled")
+
+        # 5. Status Bar
         self.status_var = tk.StringVar(value="Ready.")
-        status_bar = ttk.Label(self.root, textvariable=self.status_var, anchor="w", relief="sunken")
+        status_bar = ctk.CTkLabel(self.root, textvariable=self.status_var, anchor="w", fg_color="#1A202C", text_color="#A0AEC0", height=24)
         status_bar.pack(fill="x", side="bottom")
 
     # ---------- helpers ----------
@@ -157,7 +173,7 @@ class TidyupApp:
         self.output.configure(state="disabled")
 
     def _set_status(self, text: str):
-        self.status_var.set(text)
+        self.status_var.set(f"  Status: {text}")
 
     # ---------- actions ----------
 
@@ -329,7 +345,7 @@ class TidyupApp:
     def toggle_watch(self):
         if self._watch_thread and self._watch_thread.is_alive():
             self._watch_stop_event.set()
-            self.watch_button.config(text="Start Watching")
+            self.watch_button.configure(text="Start Watching", fg_color="#2F855A", hover_color="#22543D")
             self._set_status("Watch mode stopped.")
             return
 
@@ -339,7 +355,7 @@ class TidyupApp:
 
         self._watch_stop_event.clear()
         self._log(f"Watching {folder} for new files...", clear=True)
-        self.watch_button.config(text="Stop Watching")
+        self.watch_button.configure(text="Stop Watching", fg_color="#C53030", hover_color="#9B2C2C")
         self._set_status("Watching for new files...")
 
         self._watch_thread = threading.Thread(
@@ -361,13 +377,12 @@ class TidyupApp:
                 performed = execute_moves(moves, dry_run=False)
                 write_log(folder, performed)
                 timestamp = time.strftime("%H:%M:%S")
-                # Schedule the UI update on the main thread.
                 self.root.after(0, self._log, f"[{timestamp}] Organized {len(performed)} new file(s).")
             self._watch_stop_event.wait(5)
 
 
 def main():
-    root = tk.Tk()
+    root = ctk.CTk()
     TidyupApp(root)
     root.mainloop()
 
