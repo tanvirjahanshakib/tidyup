@@ -255,4 +255,4 @@ Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT © [Your Name](LICENSE)
+MIT © [Md. Tanvir Jahan Shakib](LICENSE)
