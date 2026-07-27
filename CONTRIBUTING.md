@@ -48,4 +48,4 @@ Open an issue with:
 - What actually happened
 - Your OS and Python version
 
-Thanks for helping make tidyup better!
+Thanks for helping make tidyup best!
