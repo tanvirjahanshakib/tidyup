@@ -2,7 +2,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests](https://github.com/your-username/tidyup/actions/workflows/tests.yml/badge.svg)](https://github.com/your-username/tidyup/actions)
+[![Tests](https://github.com/tanvirjahanshakib/tidyup/actions/workflows/tests.yml/badge.svg)](https://github.com/tanvirjahanshakib/tidyup/actions)
 
 **A smart file organizer for messy folders — available as both a CLI and a point-and-click desktop app. Organizes by type, date, or filename pattern, with duplicate detection, stale-file finding, live watch mode, multi-step undo history, and full audit trails. Zero dependencies.**
 
@@ -72,7 +72,7 @@ pip install tidyup-cli
 Or install from source:
 
 ```bash
-git clone https://github.com/your-username/tidyup.git
+git clone https://github.com/tanvirjahanshakib/tidyup.git
 cd tidyup
 pip install -e .
 ```
@@ -259,4 +259,4 @@ Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT © [Your Name](LICENSE)
+MIT © <a href="https://github.com/tanvirjahanshakib">Md. Tanvir Jahan Shakib (@tanvirjahanshakib)</a>

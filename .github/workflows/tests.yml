@@ -23,7 +23,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Run tests
-        run: python -m unittest discover -s tests -v
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          # Run pytest under a virtual X server so real Tk code runs in CI
+          xvfb-run -s "-screen 0 1920x1080x24" pytest -q
 
   gui-real-tk-smoke-test:
     # Extra safety net: the unit tests above stub out tkinter so they
