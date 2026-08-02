@@ -19,14 +19,11 @@ classifiers = [
     "Environment :: X11 Applications",
     "Topic :: Utilities",
 ]
-dependencies = [
-    "customtkinter>=5.2.0",
-]
 
 [project.scripts]
 tidyup = "tidyup.cli:main"
 tidyup-gui = "tidyup.gui:main"
 
 [project.urls]
-Homepage = "https://github.com/tanvirjahanshakib/tidyup"
-Issues = "https://github.com/tanvirjahanshakib/tidyup/issues"
+Homepage = "https://github.com/your-username/tidyup"
+Issues = "https://github.com/your-username/tidyup/issues"

@@ -2,7 +2,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests](https://github.com/tanvirjahanshakib/tidyup/actions/workflows/tests.yml/badge.svg)](https://github.com/tanvirjahanshakib/tidyup/actions)
+[![Tests](https://github.com/your-username/tidyup/actions/workflows/tests.yml/badge.svg)](https://github.com/your-username/tidyup/actions)
 
 **A smart file organizer for messy folders — available as both a CLI and a point-and-click desktop app. Organizes by type, date, or filename pattern, with duplicate detection, stale-file finding, live watch mode, multi-step undo history, and full audit trails. Zero dependencies.**
 
@@ -72,7 +72,7 @@ pip install tidyup-cli
 Or install from source:
 
 ```bash
-git clone https://github.com/tanvirjahanshakib/tidyup.git
+git clone https://github.com/your-username/tidyup.git
 cd tidyup
 pip install -e .
 ```
@@ -89,14 +89,18 @@ tidyup-gui
 
 <p align="center"><em>(screenshot — add one after your first run: File → Save Screenshot, or Cmd/Win+Shift+S)</em></p>
 
-A point-and-click window with the same engine as the CLI — pick a folder, choose how to organize it, and click a button. No terminal required.
+A polished, card-based window with the same engine as the CLI — pick a folder, choose how to organize it, and click a button. No terminal required.
 
-- **Browse** for a folder, or type/paste a path
+- **Light and dark themes** — toggle with the 🌙/☀️ button or the View menu
+- **Recent folders** remembered in a dropdown for the session, so you don't retype paths
+- **Browse** for a folder, or type/paste a path (Enter runs a preview)
 - Choose **by type / date / both**, toggle **recursive** and **smart filename categorization**
-- **Preview (dry run)** shows exactly what would happen before you commit
+- **Preview** shows exactly what would happen before you commit
 - **Organize Now** asks for confirmation, then moves the files
-- **Undo Last Run**, **Show History**, **Stats**, **Find Duplicates**, **Find Stale Files**, and **Clean Empty Folders** are all one click away
+- **Undo Last**, **History**, **Stats**, **Duplicates**, **Find Stale Files**, and **Clean Empty** are all one click away
 - **Start Watching** runs the same watch-mode loop as the CLI, right in the window, with live results streaming into the output pane
+- **Save Log...** exports the output pane's contents to a text file; **Clear** wipes it
+- A **File / View / Help** menu bar, with an About dialog
 
 The GUI is a thin window around the exact same `tidyup/organizer.py` engine the CLI uses — same tests, same guarantees, same `.tidyup_log.json` undo history (a folder organized from the CLI can be undone from the GUI and vice versa).
 
@@ -255,4 +259,4 @@ Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT © [Md. Tanvir Jahan Shakib (@tanvirjahanshakib}](LICENSE)
+MIT © [Your Name](LICENSE)

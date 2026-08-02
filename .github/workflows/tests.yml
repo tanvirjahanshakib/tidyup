@@ -51,6 +51,13 @@ jobs:
           root = tk.Tk()
           app = TidyupApp(root)
           root.update()
+          # Exercise the theming code path with a real Tk runtime — this
+          # is the part most likely to break in ways a mocked test can't
+          # catch (e.g. an invalid color value only Tk itself rejects).
+          app.toggle_dark_mode()
+          root.update()
+          app.toggle_dark_mode()
+          root.update()
           root.destroy()
-          print('GUI window created and destroyed successfully with real Tk.')
+          print('GUI window created, dark mode toggled, and destroyed successfully with real Tk.')
           "

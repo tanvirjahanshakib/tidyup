@@ -31,25 +31,38 @@ def _install_fake_tkinter():
             self._value = value
 
     class FakeWidget(MagicMock):
+        """A MagicMock that also supports being used as a widget:
+        safe to construct with positional args (parent/master), and
+        returns sane defaults for the introspection calls the app makes
+        (winfo_children/winfo_class) so recursive styling code doesn't
+        iterate over auto-mocked garbage."""
         def __init__(self, *a, **k):
             super().__init__()
+            self.winfo_children = MagicMock(return_value=[])
+            self.winfo_class = MagicMock(return_value="Unknown")
 
     fake_tk = types.ModuleType("tkinter")
     fake_tk.Tk = MagicMock
     fake_tk.StringVar = FakeVar
     fake_tk.BooleanVar = FakeVar
     fake_tk.Frame = FakeWidget
+    fake_tk.Label = FakeWidget
+    fake_tk.Button = FakeWidget
+    fake_tk.Menu = FakeWidget
+    fake_tk.TclError = type("TclError", (Exception,), {})
 
     fake_ttk = types.ModuleType("tkinter.ttk")
-    for name in ["Frame", "Label", "Entry", "Button", "LabelFrame", "Combobox", "Checkbutton"]:
+    for name in ["Frame", "Label", "Entry", "Button", "LabelFrame", "Combobox", "Checkbutton", "Style"]:
         setattr(fake_ttk, name, FakeWidget)
 
     fake_filedialog = types.ModuleType("tkinter.filedialog")
     fake_filedialog.askdirectory = MagicMock(return_value="")
+    fake_filedialog.asksaveasfilename = MagicMock(return_value="")
 
     fake_messagebox = types.ModuleType("tkinter.messagebox")
     fake_messagebox.showwarning = MagicMock()
     fake_messagebox.showerror = MagicMock()
+    fake_messagebox.showinfo = MagicMock()
     fake_messagebox.askyesno = MagicMock(return_value=True)
 
     fake_scrolledtext = types.ModuleType("tkinter.scrolledtext")
@@ -70,6 +83,9 @@ def _install_fake_tkinter():
 
         def see(self, *a, **k):
             pass
+
+        def get(self, start=None, end=None):
+            return "\n".join(self._lines)
 
     fake_scrolledtext.ScrolledText = FakeScrolledText
 
@@ -158,6 +174,43 @@ class TestGuiLogic(unittest.TestCase):
     def test_invalid_folder_returns_none_without_crashing(self):
         self.app.folder_var.set("/this/path/does/not/exist/at/all")
         self.assertIsNone(self.app._get_folder())
+
+    def test_toggle_dark_mode_switches_palette_without_crashing(self):
+        self.assertFalse(self.app.dark_mode)
+        self.app.toggle_dark_mode()
+        self.assertTrue(self.app.dark_mode)
+        self.app.toggle_dark_mode()
+        self.assertFalse(self.app.dark_mode)
+
+    def test_show_about_does_not_crash(self):
+        self.app._show_about()  # should not raise
+
+    def test_recent_folders_remembers_used_folder(self):
+        self.app._get_folder()
+        self.assertIn(str(self.tmp_dir), self.app.recent_folders)
+
+    def test_recent_folders_caps_at_eight(self):
+        for i in range(10):
+            self.app._remember_folder(f"/fake/folder/{i}")
+        self.assertLessEqual(len(self.app.recent_folders), 8)
+
+    def test_clear_output_empties_the_log(self):
+        self.app.action_preview()
+        self.assertTrue(len(self._output_lines()) > 0)
+        self.app._clear_output()
+        self.assertEqual(len(self._output_lines()), 0)
+
+    def test_save_output_writes_file(self):
+        import tempfile as _tempfile
+        save_path = Path(_tempfile.mkdtemp()) / "log.txt"
+        self.app.action_preview()
+
+        import tidyup.gui as gui_module
+        gui_module.filedialog.asksaveasfilename = MagicMock(return_value=str(save_path))
+        self.app._save_output()
+
+        self.assertTrue(save_path.exists())
+        self.assertIn("photo.jpg", save_path.read_text())
 
 
 if __name__ == "__main__":
